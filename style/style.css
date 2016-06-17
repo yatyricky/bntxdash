@@ -1,0 +1,37 @@
+.view-port{
+	display: inline-block;
+	width: 45%;
+	vertical-align: top;
+}
+.func-row {
+	margin-bottom: 4px;
+}
+.func-name {
+	display: inline-block;
+	width: 200px;
+}
+input {
+	display: inline-block;
+}
+.button {
+	display: inline-block;
+	border: 1px solid #000;
+	cursor: pointer;
+	width: 75px;
+	text-align: center;
+}
+.button:hover {
+	background-color: #000;
+	color: #fff;
+}
+.button:active {
+	background-color: #999;
+	color: #fff;
+}
+table {
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+tr {
+	border-bottom: 1px solid #000;
+}
