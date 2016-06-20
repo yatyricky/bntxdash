@@ -28,10 +28,6 @@ input {
 	background-color: #999;
 	color: #fff;
 }
-table {
-	border-spacing: 0;
-	border-collapse: collapse;
-}
-tr {
-	border-bottom: 1px solid #000;
+td {
+	border: 1px solid #000;
 }
