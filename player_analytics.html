@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="style/style.css" />
+    <script src="js/jquery-2.2.3.min.js"></script>
+    <script src="js/highcharts.js"></script>
+    <script src="js/exporting.js"></script>
+    <title>Player Stats Analytics</title>
+</head>
+
+<body>
+<div id="pending-files"></div>
+<div id="output"></div>
+<div id="all-chips" class="chart"></div>
+
+<script type="text/javascript">
+var fnList = [];
+var alldata = [];
+
+function updatePendingList() {
+	var sb = "";
+	for (var i = 0; i < fnList.length; i++) {
+		sb += fnList[i] + "<br/>";
+	}
+    $("#pending-files").html(sb);
+}
+
+function conjureAllChips() {
+	var cats = [];
+	var sumchips = [];
+	for (var i = 0; i < alldata.length; i++) {
+		cats.push(alldata[i].chunk.replace("userinfo-2016-",""));
+		var sumone = 0;
+		for (var j = 0; j < alldata[i].data.length; j++) {
+			sumone += alldata[i].data[j].totalChips;
+		}
+		sumchips.push(sumone);
+	}
+	$('#all-chips').highcharts({
+        title: {
+            text: '所有筹码',
+            x: -20 //center
+        },
+        subtitle: {
+            text: '',
+            x: -20
+        },
+        xAxis: {
+            categories: cats
+        },
+        yAxis: {
+            title: {
+                text: 'Chips'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: ''
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: '总筹码',
+            data: sumchips
+        }]
+    });
+}
+
+$(document).ready(function () {
+    $.ajax({
+        type: "post",
+        data: {
+        	"do": "getFileNames"
+        },
+        dataType: "json",
+        url: "./playerraw/reader.php",
+        success: function(response) {
+        	fnList = response;
+        	updatePendingList();
+
+        	while (fnList.length > 0) {
+        		$.ajax({
+			        type: "post",
+			        data: {
+			        	"do": "getContents",
+			        	"fn": fnList[0]
+			        },
+			        dataType: "json",
+			        url: "./playerraw/reader.php",
+			        async: false,
+			        success: function(response) {
+			        	alldata.push({
+			        		"chunk": fnList[0],
+			        		"data": response
+			        	});
+			        },
+			        error: function( error ) {
+			            console.log(error);
+			        }
+			    });
+		    	fnList.shift();
+		    	updatePendingList();
+        	}
+        	// $("#output").html(JSON.stringify(alldata, 2));
+        	conjureAllChips();
+        },
+        error: function( error ) {
+            console.log(error);
+        }
+    });
+});
+</script>
+</body>
+</html>
