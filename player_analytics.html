@@ -12,10 +12,13 @@
 <div id="pending-files"></div>
 <div id="output"></div>
 <div id="all-chips" class="chart"></div>
+<div id="all-played" class="chart"></div>
+<div id="churn-played" class="chart"></div>
 
 <script type="text/javascript">
 var fnList = [];
 var alldata = [];
+var logininfo;
 
 function updatePendingList() {
 	var sb = "";
@@ -29,7 +32,7 @@ function conjureAllChips() {
 	var cats = [];
 	var sumchips = [];
 	for (var i = 0; i < alldata.length; i++) {
-		cats.push(alldata[i].chunk.replace("userinfo-2016-",""));
+		cats.push(alldata[i].chunk);
 		var sumone = 0;
 		for (var j = 0; j < alldata[i].data.length; j++) {
 			sumone += alldata[i].data[j].totalChips;
@@ -39,6 +42,142 @@ function conjureAllChips() {
 	$('#all-chips').highcharts({
         title: {
             text: '所有筹码',
+            x: -20 //center
+        },
+        subtitle: {
+            text: '',
+            x: -20
+        },
+        xAxis: {
+            categories: cats
+        },
+        yAxis: {
+            title: {
+                text: 'Chips'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: ''
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: '总筹码',
+            data: sumchips
+        }]
+    });
+}
+
+function conjureAllPlayed() {
+	var cats = [];
+	var sumchips = [];
+	var previous = 0;
+	for (var i = 0; i < alldata.length; i++) {
+		cats.push(alldata[i].chunk);
+		var sumone = 0;
+		for (var j = 0; j < alldata[i].data.length; j++) {
+			sumone += alldata[i].data[j].played;
+		}
+		if (i > 0) {
+			sumchips.push(sumone - previous);
+		} else {
+			sumchips.push(sumone);
+		}
+		previous = sumone;
+	}
+	$('#all-played').highcharts({
+        title: {
+            text: '平均局数',
+            x: -20 //center
+        },
+        subtitle: {
+            text: '',
+            x: -20
+        },
+        xAxis: {
+            categories: cats
+        },
+        yAxis: {
+            title: {
+                text: 'Chips'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: ''
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: '总筹码',
+            data: sumchips
+        }]
+    });
+}
+
+function conjureChurnPLayed() {
+	var collabrate = [];
+	for (var key in logininfo) {
+		if (logininfo.hasOwnProperty(key)) {
+			// console.log(key + " - " + logininfo[key].length);
+			collabrate.push({
+				"date": key,
+				"ids": logininfo[key]
+			});
+		}
+	}
+
+	var cats = [];
+	var sumchips = [];
+	for (var i = 0; i < collabrate.length - 1; i++) {
+		var churn = collabrate[i].ids.filter(function(el) {
+		    return collabrate[i+1].ids.indexOf(el) < 0;
+		});
+		cats.push(collabrate[i].date);
+		var realChurn = [];
+		for (var j = 0; j < churn.length; j++) {
+			realChurn.push(parseInt(churn[j]));
+		}
+
+		for (var j = 0; j < alldata.length; j++) {
+			var str1 = $.trim(alldata[j].chunk);
+			var str2 = $.trim(collabrate[i+1].date+"-18");
+			if (str1.localeCompare(str2) == 0) {
+				var sumone = 0;
+				var sumoneCount = 0;
+				for (var k = 0; k < alldata[j].data.length; k++) {
+					if (realChurn.indexOf(alldata[j].data[k].id) > -1) {
+						sumoneCount ++;
+						sumone += alldata[j].data[k].played;
+					}
+				}
+				sumchips.push(sumone / sumoneCount);
+			}
+		}
+		
+	}
+
+
+	$('#churn-played').highcharts({
+        title: {
+            text: '平均局数',
             x: -20 //center
         },
         subtitle: {
@@ -98,7 +237,7 @@ $(document).ready(function () {
 			        async: false,
 			        success: function(response) {
 			        	alldata.push({
-			        		"chunk": fnList[0],
+			        		"chunk": fnList[0].replace("./userinfo-","").replace(".plog",""),
 			        		"data": response
 			        	});
 			        },
@@ -109,8 +248,28 @@ $(document).ready(function () {
 		    	fnList.shift();
 		    	updatePendingList();
         	}
+
+        	// console.log("All Data Length = " + alldata.length);
+
+    		$.ajax({
+		        type: "post",
+		        data: {
+		        	"do": "getLoginInfo"
+		        },
+		        dataType: "json",
+		        url: "./playerraw/reader.php",
+		        async: false,
+		        success: function(response) {
+		        	logininfo = response;
+		        },
+		        error: function( error ) {
+		            console.log(error);
+		        }
+		    });
         	// $("#output").html(JSON.stringify(alldata, 2));
         	conjureAllChips();
+        	conjureAllPlayed();
+        	conjureChurnPLayed();
         },
         error: function( error ) {
             console.log(error);
