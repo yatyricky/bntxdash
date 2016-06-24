@@ -4,11 +4,12 @@
 	vertical-align: top;
 }
 .func-row {
-	margin-bottom: 4px;
+	margin-bottom: 20px;
+	margin-top:10px;
+	margin-left: 10px;
 }
 .func-name {
-	display: inline-block;
-	width: 200px;
+	display: block;
 }
 input {
 	display: inline-block;
@@ -28,6 +29,10 @@ input {
 	background-color: #999;
 	color: #fff;
 }
-td {
-	border: 1px solid #000;
+
+.chart{
+	min-width: 310px; 
+	height: 400px; 
+	margin: 0 auto;
 }
+
