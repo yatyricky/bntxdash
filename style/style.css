@@ -1,9 +1,14 @@
+::-webkit-scrollbar {
+    width: 2px;
+}
 .view-port{
 	display: inline-block;
-	width: 45%;
+	width: 49%;
 	vertical-align: top;
+	height: 98vh;
+	overflow: scroll;
 }
-.func-row {
+fieldset {
 	margin-bottom: 20px;
 	margin-top:10px;
 	margin-left: 10px;
@@ -29,10 +34,11 @@ input {
 	background-color: #999;
 	color: #fff;
 }
-
-
 .chart{
 	min-width: 310px; 
 	height: 400px; 
 	margin: 0 auto;
+}
+.right-align {
+	text-align: right;
 }
