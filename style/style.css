@@ -21,10 +21,11 @@ input {
 }
 .button {
 	display: inline-block;
-	border: 1px solid #000;
+	border: 1px solid #000000;
 	cursor: pointer;
 	width: 75px;
 	text-align: center;
+	background: #FFFFFF;
 }
 .button:hover {
 	background-color: #000;
