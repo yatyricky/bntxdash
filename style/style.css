@@ -13,14 +13,11 @@ fieldset {
 	margin-top:10px;
 	margin-left: 10px;
 }
-.func-name {
+input {
 	display: block;
 }
-input {
-	display: inline-block;
-}
 .button {
-	display: inline-block;
+	display: block;
 	border: 1px solid #000000;
 	cursor: pointer;
 	width: 75px;
@@ -42,4 +39,9 @@ input {
 }
 .right-align {
 	text-align: right;
+}
+textarea {
+	display: block;
+	width: 95%;
+	overflow: scroll;
 }
