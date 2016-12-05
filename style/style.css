@@ -1,12 +1,16 @@
-::-webkit-scrollbar {
-    width: 2px;
-}
-.view-port{
+#opts-port{
 	display: inline-block;
-	width: 49%;
+	width: 35vw;
 	vertical-align: top;
 	height: 98vh;
-	overflow: scroll;
+	overflow: auto;
+}
+#result-port{
+	display: inline-block;
+	vertical-align: top;
+	width: 63vw;
+	height: 98vh;
+	overflow: auto;
 }
 fieldset {
 	margin-bottom: 20px;
