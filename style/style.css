@@ -17,8 +17,13 @@ fieldset {
 	margin-top:10px;
 	margin-left: 10px;
 }
+.labelGroup {
+	display: inline-block;
+	width: 90px;
+	text-align: right;
+}
 input {
-	display: block;
+	display: inline-block;
 }
 .button {
 	display: block;
