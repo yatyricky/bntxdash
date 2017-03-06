@@ -50,7 +50,8 @@ input {
 	text-align: right;
 }
 textarea {
-	display: block;
-	width: 95%;
+	display: inline-block;
+	width: 500px;
+	min-height: 100px;
 	overflow: scroll;
 }
