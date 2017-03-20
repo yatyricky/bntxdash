@@ -57,11 +57,11 @@ class RobotOnRetention extends React.Component {
     }
 
     renderTable() {
-        const datas = this.state.result.replace(/['"]+/g, '').trim().split(",");
-        console.log(this.state.result);
-        console.log(datas);
+        const original = this.state.result.replace(/['"\\rn]+/g, '').trim();
+        const datas = original.split(",")
+        const finalResult = (<textarea className="form-control" defaultValue={original} />);
         if (datas.length < 10) {
-            return (<div>Error!</div>);
+            return finalResult;
         } else {
             return (
                 <div>
@@ -113,6 +113,7 @@ class RobotOnRetention extends React.Component {
                         <span>玩家-机器人交互率：</span>
                         <span>{this.calcPercentage(parseFloat(datas[2])+parseFloat(datas[3])+parseFloat(datas[4]), parseFloat(datas[0])+parseFloat(datas[1])+parseFloat(datas[2])+parseFloat(datas[3])+parseFloat(datas[4]))}</span>
                     </div>
+                    {finalResult}
                 </div>
             );
         }
