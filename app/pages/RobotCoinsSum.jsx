@@ -118,6 +118,12 @@ class RobotCoinsSum extends React.Component {
         this.postData();
     }
 
+    componentWillUnmount() {
+        if (this.lastRequest != null) {
+            this.lastRequest.abort();
+        }
+    }
+
     render() {
         return (
             <div>

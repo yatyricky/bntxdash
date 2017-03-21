@@ -129,6 +129,12 @@ class RobotStatus extends React.Component {
         this.setState({flag: Flag.waiting});
     }
 
+    componentWillUnmount() {
+        if (this.lastRequest != null) {
+            this.lastRequest.abort();
+        }
+    }
+
     renderResult(flag) {
         let ret;
         switch (flag) {

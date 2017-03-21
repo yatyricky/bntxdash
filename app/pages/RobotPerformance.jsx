@@ -117,6 +117,12 @@ class RobotPerformance extends React.Component {
         return ret;
     }
 
+    componentWillUnmount() {
+        if (this.lastRequest != null) {
+            this.lastRequest.abort();
+        }
+    }
+
     render() {
         return (
             <div>
