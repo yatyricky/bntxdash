@@ -6,6 +6,7 @@ import Layout from './Layout.jsx';
 import Welcome from './pages/Welcome.jsx';
 
 import RobotStatus from './pages/RobotStatus.jsx';
+import RobotCoinsSum from './pages/RobotCoinsSum.jsx';
 import QueryRobotConfig from './pages/QueryRobotConfig.jsx';
 import RobotOnRetention from './pages/RobotOnRetention.jsx';
 import RobotPerformance from './pages/RobotPerformance.jsx';
@@ -23,6 +24,7 @@ class Main extends React.Component {
                 <Route path="/" component={Layout}>
                     <IndexRoute component={Welcome}></IndexRoute>
                     <Route path="robotStatus" name="robotStatus" component={RobotStatus}></Route>
+                    <Route path="robotCoinsSum" name="robotCoinsSum" component={RobotCoinsSum}></Route>
                     <Route path="queryRobotConfig" name="queryRobotConfig" component={QueryRobotConfig}></Route>
                     <Route path="robotOnRetention" name="robotOnRetention" component={RobotOnRetention}></Route>
                     <Route path="robotPerformance" name="robotPerformance" component={RobotPerformance}></Route>
