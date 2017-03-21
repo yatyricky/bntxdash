@@ -28,9 +28,9 @@ class RobotTable extends React.Component {
                         <td>{item.account_id}</td>
                         <td>{item.table_id}</td>
                         <td>{item.nick_name}</td>
-                        <td>{item.coins}</td>
-                        <td>{item.gm_add_coins}</td>
-                        <td>{parseFloat(item.coins) - parseFloat(item.gm_add_coins) - 18888}</td>
+                        <td className="text-right">{Number(item.coins).toLocaleString()}</td>
+                        <td className="text-right">{Number(item.gm_add_coins).toLocaleString()}</td>
+                        <td className="text-right">{(Number(item.coins) - Number(item.gm_add_coins) - 18888).toLocaleString()}</td>
                         <td>{item.weight}</td>
                         <td>{item.robot_type == 1 ? "Mimics" : "Follower"}</td>
                         <td>{(function (roboTime, curTime) {
@@ -55,8 +55,8 @@ class RobotTable extends React.Component {
             <div>
                 <div className="row">
                     <span className="col-xs-3"><label>机器人总数：</label>{`${online} / ${this.props.list.length}`}</span>
-                    <span className="col-xs-3"><label>总筹码：</label>{sumCoins}</span>
-                    <span className="col-xs-3"><label>总赢取：</label>{sumCoins - sumGMCoins - 18888 * this.props.list.length}</span>
+                    <span className="col-xs-3"><label>总筹码：</label>{sumCoins.toLocaleString()}</span>
+                    <span className="col-xs-3"><label>总赢取：</label>{(sumCoins - sumGMCoins - 18888 * this.props.list.length).toLocaleString()}</span>
                     <span className="col-xs-3"><label>牌桌数：</label>{uniqueTables.length - 1}</span>
                 </div>
                 <div className="table-responsive">
@@ -66,9 +66,9 @@ class RobotTable extends React.Component {
                                 <th>account_id</th>
                                 <th>table_id</th>
                                 <th>nick_name</th>
-                                <th>coins</th>
-                                <th>gm_add_coins</th>
-                                <th>won</th>
+                                <th className="text-right">coins</th>
+                                <th className="text-right">gm_add_coins</th>
+                                <th className="text-right">won</th>
                                 <th>weight</th>
                                 <th>robot_type</th>
                                 <th>wake_time</th>

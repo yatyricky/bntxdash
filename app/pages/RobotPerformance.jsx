@@ -63,10 +63,10 @@ class RobotPerformance extends React.Component {
                     bbalance+=obj[k][1]+",";
                     return (
                         <tr key={index}>
-                            <td>{k}</td>
-                            <td>{obj[k][0]}</td>
-                            <td>{obj[k][7]}</td>
-                            <td>{obj[k][1]}</td>
+                            <td className="text-right">{k}</td>
+                            <td className="text-right">{obj[k][0]}</td>
+                            <td className="text-right">{obj[k][7]}</td>
+                            <td className="text-right">{Number(obj[k][1]).toLocaleString()}</td>
                         </tr>
                     );
                 }
@@ -77,10 +77,10 @@ class RobotPerformance extends React.Component {
                         <table className="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>类型</th>
-                                    <th>出勤数</th>
-                                    <th>牌局数</th>
-                                    <th>盈亏平衡</th>
+                                    <th className="text-right">类型</th>
+                                    <th className="text-right">出勤数</th>
+                                    <th className="text-right">牌局数</th>
+                                    <th className="text-right">盈亏平衡</th>
                                 </tr>
                             </thead>
                             <tbody>

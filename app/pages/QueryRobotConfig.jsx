@@ -49,7 +49,7 @@ class QueryRobotConfig extends React.Component {
             const entries = obj.map((item, index) => 
                 {
                     const tokens = item.map((token, idx) => (
-                        <td key={idx}>{token}</td>
+                        <td className="text-right" key={idx}>{Number(token).toLocaleString()}</td>
                     ));
                     return (
                         <tr key={index}>
@@ -64,25 +64,25 @@ class QueryRobotConfig extends React.Component {
                         <table className="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>类型</th>
-                                    <th>初等下</th>
-                                    <th>初等上</th>
-                                    <th>初筹下</th>
-                                    <th>初筹上</th>
-                                    <th>进携下</th>
-                                    <th>进携上</th>
-                                    <th>场类型</th>
-                                    <th>目标筹</th>
-                                    <th>级上限</th>
-                                    <th>补给次</th>
-                                    <th>CD下</th>
-                                    <th>CD上</th>
-                                    <th>权重下</th>
-                                    <th>权重上</th>
-                                    <th>局数下</th>
-                                    <th>局数上</th>
-                                    <th>肉鸡</th>
-                                    <th>数量</th>
+                                    <th className="text-right">类型</th>
+                                    <th className="text-right">初等下</th>
+                                    <th className="text-right">初等上</th>
+                                    <th className="text-right">初筹下</th>
+                                    <th className="text-right">初筹上</th>
+                                    <th className="text-right">进携下</th>
+                                    <th className="text-right">进携上</th>
+                                    <th className="text-right">场类型</th>
+                                    <th className="text-right">目标筹</th>
+                                    <th className="text-right">级上限</th>
+                                    <th className="text-right">补给次</th>
+                                    <th className="text-right">CD下</th>
+                                    <th className="text-right">CD上</th>
+                                    <th className="text-right">权重下</th>
+                                    <th className="text-right">权重上</th>
+                                    <th className="text-right">局数下</th>
+                                    <th className="text-right">局数上</th>
+                                    <th className="text-right">肉鸡</th>
+                                    <th className="text-right">数量</th>
                                 </tr>
                             </thead>
                             <tbody>

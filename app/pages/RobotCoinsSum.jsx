@@ -48,8 +48,8 @@ class RobotCoinsSum extends React.Component {
             return (
                 <tr key={index}>
                     <td>{item.time}</td>
-                    <td>{item.value}</td>
-                    <td>{item.played}</td>
+                    <td>{Number(item.value).toLocaleString()}</td>
+                    <td>{Number(item.played).toLocaleString()}</td>
                 </tr>
             );
         });
