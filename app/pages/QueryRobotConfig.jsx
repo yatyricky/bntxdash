@@ -44,7 +44,6 @@ class QueryRobotConfig extends React.Component {
         let obj = null;
         try {
             obj = JSON.parse(this.state.result);
-            console.log(obj);
 
             const entries = obj.map((item, index) => 
                 {
