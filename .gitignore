@@ -2,3 +2,4 @@
 bntxdash.log
 node_modules
 bundle.js
+*.php
