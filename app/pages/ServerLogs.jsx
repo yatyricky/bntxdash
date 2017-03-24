@@ -26,7 +26,7 @@ class ServerLogs extends React.Component {
         const xhr = new XMLHttpRequest();
         this.lastRequest = xhr;
 
-        xhr.open('POST', 'action.php');
+        xhr.open('POST', 'api/action.php');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
         xhr.onload = () => {
             this.lastRequest = null;
@@ -49,9 +49,9 @@ class ServerLogs extends React.Component {
     renderTable() {
         let obj = null;
         try {
-            obj = JSON.parse(this.state.result);
+            obj = JSON.parse(this.state.result).resp.reverse();
 
-            const entries = obj.resp.map((item, index) => 
+            const entries = obj.map((item, index) => 
                 {
                     return (
                         <tr key={index}>
