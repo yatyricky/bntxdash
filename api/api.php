@@ -29,6 +29,23 @@ case 'robot_coins_sum':
     $made = "Check system robot sum";
 break;
 
+case 'player-win-robots':
+    $made = 'http://'.$config['serverLocalOP'].':'.$config['portLocal'].'/groot/merge_player_win_robots.py';
+    $params = "dateStart=".$_POST['start']."&dateEnd=".$_POST['end'];
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_RETURNTRANSFER => 1,
+        CURLOPT_URL => $made,
+        CURLOPT_USERAGENT => 'robot-analysis-performance',
+        CURLOPT_POST => 1,
+        CURLOPT_POSTFIELDS => $params
+    ));
+    $resp = curl_exec($curl);
+    curl_close($curl);
+
+    $json = json_decode($resp);
+break;
+
 default:
 break;
 }

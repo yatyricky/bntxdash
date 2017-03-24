@@ -70,9 +70,6 @@ class Navigation extends React.Component {
                         "text": "查询机器人状态",
                         "to": "robotStatus"
                     }, {
-                        "text": "查询机器人金币存量",
-                        "to": "robotCoinsSum"
-                    }, {
                         "text": "查询机器人配置",
                         "to": "queryRobotConfig"
                     }, {
