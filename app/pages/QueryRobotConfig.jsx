@@ -20,7 +20,7 @@ class QueryRobotConfig extends React.Component {
         const xhr = new XMLHttpRequest();
         this.lastRequest = xhr;
 
-        xhr.open('POST', 'api/action.php');
+        xhr.open('POST', 'api/queryRobotConfig.php');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
         xhr.onload = () => {
             this.lastRequest = null;
@@ -36,7 +36,7 @@ class QueryRobotConfig extends React.Component {
                 });
             }
         };
-        xhr.send(encodeURI("do=view-robot-config"));
+        xhr.send(encodeURI(""));
         this.setState({flag: Flag.waiting});
     }
 
