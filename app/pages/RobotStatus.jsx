@@ -1,11 +1,5 @@
 import React from 'react';
-
-const Flag = {
-    "nothing": 100,
-    "waiting": 101,
-    "success": 200,
-    "failed": 300
-}
+import {Flag} from '../Flag.js';
 
 class RobotTable extends React.Component {
 
@@ -108,7 +102,7 @@ class RobotStatus extends React.Component {
         const xhr = new XMLHttpRequest();
         this.lastRequest = xhr;
 
-        xhr.open('POST', 'api/action.php');
+        xhr.open('POST', 'api/robotStatus.php');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
         xhr.onload = () => {
             this.lastRequest = null;
@@ -125,7 +119,7 @@ class RobotStatus extends React.Component {
                 });
             }
         };
-        xhr.send(encodeURI(`do=get-robot-info&svr=${params}`));
+        xhr.send(encodeURI(`server=${params}`));
         this.setState({flag: Flag.waiting});
     }
 
