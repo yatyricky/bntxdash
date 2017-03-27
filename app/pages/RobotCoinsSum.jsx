@@ -22,7 +22,7 @@ class RobotCoinsSum extends React.Component {
         const xhr = new XMLHttpRequest();
         this.lastRequest = xhr;
 
-        xhr.open('POST', 'api/api.php');
+        xhr.open('POST', 'api/robotCoinsSum.php');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
         xhr.onload = () => {
             this.lastRequest = null;
@@ -44,7 +44,7 @@ class RobotCoinsSum extends React.Component {
     }
 
     renderTable() {
-        const arr = this.state.result.resp.reverse();
+        const arr = this.state.result.reverse();
         const entries = arr.map((item, index) => {
             return (
                 <tr key={index}>
@@ -74,9 +74,9 @@ class RobotCoinsSum extends React.Component {
         let ret;
         switch (flag) {
             case Flag.success:
-                for (let i = 0; i < this.state.result.resp.length; i++) {
-                    this.config.categories.push(this.state.result.resp[i].time.split(" ")[0]);
-                    this.config.data.push(parseInt(this.state.result.resp[i].value));
+                for (let i = 0; i < this.state.result.length; i++) {
+                    this.config.categories.push(this.state.result[i].time.split(" ")[0]);
+                    this.config.data.push(parseInt(this.state.result[i].value));
                 }
                 const highConfig = {
                     title: {

@@ -8,27 +8,6 @@ $made = "";
 
 switch ($do) {
 
-case 'robot_coins_sum':
-    $array = array();
-    $handle = fopen($config['pathBotCoins'], "r");
-    if ($handle) {
-        while (($line = fgets($handle)) !== false) {
-            $tokens = explode(',', trim($line));
-            if (count($tokens) == 3){
-                $obj['time'] = $tokens[0];
-                $obj['value'] = $tokens[1];
-                $obj['played'] = $tokens[2];
-                $array[] = $obj;
-            }
-        }
-        fclose($handle);
-    } else {
-        $array[] = "Error reading robot sum.";
-    }
-    $json['resp'] = $array;
-    $made = "Check system robot sum";
-break;
-
 case 'player-win-robots':
     $made = 'http://'.$config['serverLocalOP'].':'.$config['portLocal'].'/groot/merge_player_win_robots.py';
     $params = "dateStart=".$_POST['start']."&dateEnd=".$_POST['end'];
