@@ -19,4 +19,3 @@ curl_close($curl);
 echo $resp;
 
 Utils::writeServerLog($made);
-?>

@@ -20,4 +20,3 @@ $made = "Check system robot sum";
 echo json_encode($array);
 
 Utils::writeServerLog($made);
-?>
