@@ -1,6 +1,6 @@
 <?php
 require_once 'config.php';
-require_once 'writeServerLog.php';
+require_once 'Utils.php';
 header('Access-Control-Allow-Origin: *');
 
 $made = 'http://'.$GLOBALS['serverLocalOP'].':'.$GLOBALS['portLocal'].'/groot/view_bot_config.py';
@@ -18,5 +18,5 @@ curl_close($curl);
 
 echo $resp;
 
-writeServerLog($made);
+Utils::writeServerLog($made);
 ?>

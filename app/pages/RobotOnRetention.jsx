@@ -26,7 +26,7 @@ class RobotOnRetention extends React.Component {
         const xhr = new XMLHttpRequest();
         this.lastRequest = xhr;
 
-        xhr.open('POST', 'api/action.php');
+        xhr.open('POST', 'api/robotOnRetention.php');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
         xhr.onload = () => {
             this.lastRequest = null;
@@ -43,7 +43,7 @@ class RobotOnRetention extends React.Component {
                 });
             }
         };
-        xhr.send(encodeURI(`do=robot-analysis-retention&value=${this.refs.inputDate.value}`));
+        xhr.send(encodeURI(`date=${this.refs.inputDate.value}`));
         this.setState({flag: Flag.waiting});
     }
 
@@ -57,9 +57,8 @@ class RobotOnRetention extends React.Component {
     }
 
     renderTable() {
-        const original = this.state.result.replace(/['"\\rn]+/g, '').trim();
-        const datas = original.split(",")
-        const finalResult = (<textarea className="form-control" defaultValue={original} />);
+        const datas = JSON.parse(this.state.result);
+        const finalResult = (<textarea className="form-control" defaultValue={this.state.result} />);
         if (datas.length < 10) {
             return finalResult;
         } else {

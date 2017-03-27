@@ -1,6 +1,6 @@
 <?php
 require_once 'config.php';
-require_once 'writeServerLog.php';
+require_once 'Utils.php';
 header('Access-Control-Allow-Origin: *');
 
 $server = $GLOBALS['serverBeta'];
@@ -21,5 +21,5 @@ curl_close($curl);
 
 echo $resp;
 
-writeServerLog($made);
+Utils::writeServerLog($made);
 ?>

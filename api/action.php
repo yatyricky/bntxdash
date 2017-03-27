@@ -82,26 +82,6 @@ case 'mod-player-stats':
     }
 break;
 
-case 'get-robot-info':
-    $server = $config['serverBeta'];
-    if ($_POST['svr'] == "prod") {
-        $server = $config['serverProdZH'];
-    }
-    $made = 'http://'.$server.':'.$config['portGS'].'/account/get_robot_state_info';
-    $curl = curl_init();
-    curl_setopt_array($curl, array(
-        CURLOPT_RETURNTRANSFER => 1,
-        CURLOPT_URL => $made,
-        CURLOPT_USERAGENT => 'Query robot info',
-        CURLOPT_POST => 1,
-        CURLOPT_POSTFIELDS => ""
-    ));
-    $resp = curl_exec($curl);
-    curl_close($curl);
-
-    $json = json_decode($resp);
-break;
-
 case 'concurrent-users':
     $made = 'http://'.$config['serverProdZH'].':'.$config['portGS'].'/system/info';
     
@@ -134,23 +114,6 @@ case 'system-log':
     $made = "Check system log";
 break;
 
-case 'robot-analysis-retention':
-    $made = 'http://'.$config['serverLocalOP'].':'.$config['portLocal'].'/groot/nu_vs_bot.py';
-    $params = "date=".$_POST['value'];
-    $curl = curl_init();
-    curl_setopt_array($curl, array(
-        CURLOPT_RETURNTRANSFER => 1,
-        CURLOPT_URL => $made,
-        CURLOPT_USERAGENT => 'robot-analysis-date',
-        CURLOPT_POST => 1,
-        CURLOPT_POSTFIELDS => $params
-    ));
-    $resp = curl_exec($curl);
-    curl_close($curl);
-
-    $json = $resp;
-break;
-
 case 'robot-analysis-performance':
     $made = 'http://'.$config['serverLocalOP'].':'.$config['portLocal'].'/groot/active_bots.py';
     $params = "date=".$_POST['value'];
@@ -159,23 +122,6 @@ case 'robot-analysis-performance':
         CURLOPT_RETURNTRANSFER => 1,
         CURLOPT_URL => $made,
         CURLOPT_USERAGENT => 'robot-analysis-performance',
-        CURLOPT_POST => 1,
-        CURLOPT_POSTFIELDS => $params
-    ));
-    $resp = curl_exec($curl);
-    curl_close($curl);
-
-    $json = json_decode($resp);
-break;
-
-case 'view-robot-config':
-    $made = 'http://'.$config['serverLocalOP'].':'.$config['portLocal'].'/groot/view_bot_config.py';
-    $params = "";
-    $curl = curl_init();
-    curl_setopt_array($curl, array(
-        CURLOPT_RETURNTRANSFER => 1,
-        CURLOPT_URL => $made,
-        CURLOPT_USERAGENT => 'view-robot-config',
         CURLOPT_POST => 1,
         CURLOPT_POSTFIELDS => $params
     ));

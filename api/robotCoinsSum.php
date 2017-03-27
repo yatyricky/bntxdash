@@ -1,10 +1,9 @@
 <?php
 require_once 'config.php';
-require_once 'writeServerLog.php';
-require_once 'tailCustom.php';
+require_once 'Utils.php';
 header('Access-Control-Allow-Origin: *');
 
-$list = explode("\n", tailCustom($GLOBALS['pathBotCoins'], 10));
+$list = explode("\n", Utils::tailCustom($GLOBALS['pathBotCoins'], 10));
 $array = [];
 for ($i = 0, $n = count($list); $i < $n; $i++) { 
     $tokens = explode(',', trim($list[$i]));
@@ -20,5 +19,5 @@ $made = "Check system robot sum";
 
 echo json_encode($array);
 
-writeServerLog($made);
+Utils::writeServerLog($made);
 ?>

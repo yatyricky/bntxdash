@@ -1,11 +1,30 @@
 <?php
+require_once 'config.php';
+
+class Utils {
+
+    static function getRealIpAddr(){
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])){   //check ip from share internet
+          $ip=$_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {  //to check ip is pass from proxy
+          $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+          $ip=$_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
+    }
+
+    public static function writeServerLog($made) {
+        file_put_contents($GLOBALS['pathSystemLog'], '['.date('Y/m/d H:i:s').']['.self::getRealIpAddr().']'.$made.PHP_EOL , FILE_APPEND | LOCK_EX);
+    }
+
     /**
      * Slightly modified version of http://www.geekality.net/2011/05/28/php-tail-tackling-large-files/
      * @author Torleif Berger, Lorenzo Stanco
      * @link http://stackoverflow.com/a/15025877/995958
      * @license http://creativecommons.org/licenses/by/3.0/
      */
-    function tailCustom($filepath, $lines = 1, $adaptive = true) {
+    public static function tailCustom($filepath, $lines = 1, $adaptive = true) {
         // Open file
         $f = @fopen($filepath, "rb");
         if ($f === false) return false;
@@ -45,4 +64,6 @@
         fclose($f);
         return trim($output);
     }
+    
+}
 ?>
