@@ -1,5 +1,6 @@
 <?php
 require_once 'config.php';
+require_once 'Utils.php';
 
 class LogManager {
 
@@ -112,46 +113,71 @@ class LogManager {
             return $obj;
         } else {
             $data = self::fetchPokerResult($date);
-            $robotList = [];
-            $winnerList = [];
+            if (count($data) > 0) {
+                $robotList = [];
+                $winnerList = [];
 
-            for ($i = 0, $n = count($data); $i < $n; $i++) {
-                $players = explode(';', $data[$i]);
+                for ($i = 0, $n = count($data); $i < $n; $i++) {
+                    $players = explode(';', $data[$i]);
 
-                // find if robot exists on the game table
-                $found = 0;
-                $tempSet = [];
-                for ($j = 0, $m = count($players); $j < $m; $j++) { 
-                    $tokens = explode(',', trim($players[$j]));
-                    if (count($tokens) == 8) {
-                        $idTokens = explode(':', $tokens[0]);
-                        $tempSet[$idTokens[0]] = floatval($tokens[5]);
-                        if (intval($tokens[7]) == 1) {
-                            $robotList[$idTokens[0]] = 1;
-                            $found = 1;
-                        }
-                    }
-                }
-
-                if ($found == 1) {
-                    foreach ($tempSet as $key => $value) {
-                        if (isset($robotList[$key]) == false) {
-                            if (isset($winnerList[$key]) == false) {
-                                $winnerList[$key] = 0;
+                    // find if robot exists on the game table
+                    $found = 0;
+                    $tempSet = [];
+                    for ($j = 0, $m = count($players); $j < $m; $j++) { 
+                        $tokens = explode(',', trim($players[$j]));
+                        if (count($tokens) == 8) {
+                            $idTokens = explode(':', $tokens[0]);
+                            $tempSet[$idTokens[0]] = floatval($tokens[5]);
+                            if (intval($tokens[7]) == 1) {
+                                $robotList[$idTokens[0]] = 1;
+                                $found = 1;
                             }
-                            $winnerList[$key] += $value;
+                        }
+                    }
+
+                    if ($found == 1) {
+                        foreach ($tempSet as $key => $value) {
+                            if (isset($robotList[$key]) == false) {
+                                if (isset($winnerList[$key]) == false) {
+                                    $winnerList[$key] = 0;
+                                }
+                                $winnerList[$key] += $value;
+                            }
                         }
                     }
                 }
-            }
 
-            $output = '';
-            foreach ($winnerList as $key => $value) {
-                $output .= $key.','.$value."\n";
-            }
+                $output = '';
+                foreach ($winnerList as $key => $value) {
+                    $output .= $key.','.$value."\n";
+                }
 
-            file_put_contents($fPath, $output, LOCK_EX);
-            return $winnerList;
+                file_put_contents($fPath, $output, LOCK_EX);
+                return $winnerList;
+            } else {
+                return [];
+            }
         }
+    }
+
+    public static function fetchRobotStatus($svr) {
+        $server = $GLOBALS['serverBeta'];
+        if ($svr == 'prod') {
+            $server = $GLOBALS['serverProdZH'];
+        }
+        $made = 'http://'.$server.':'.$GLOBALS['portGS'].'/account/get_robot_state_info';
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => $made,
+            CURLOPT_USERAGENT => 'Query robot info',
+            CURLOPT_POST => 1,
+            CURLOPT_POSTFIELDS => ''
+        ));
+        $resp = curl_exec($curl);
+        curl_close($curl);
+        Utils::writeServerLog($made);
+
+        return $resp;
     }
 }

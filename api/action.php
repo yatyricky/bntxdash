@@ -114,23 +114,6 @@ case 'system-log':
     $made = "Check system log";
 break;
 
-case 'robot-analysis-performance':
-    $made = 'http://'.$config['serverLocalOP'].':'.$config['portLocal'].'/groot/active_bots.py';
-    $params = "date=".$_POST['value'];
-    $curl = curl_init();
-    curl_setopt_array($curl, array(
-        CURLOPT_RETURNTRANSFER => 1,
-        CURLOPT_URL => $made,
-        CURLOPT_USERAGENT => 'robot-analysis-performance',
-        CURLOPT_POST => 1,
-        CURLOPT_POSTFIELDS => $params
-    ));
-    $resp = curl_exec($curl);
-    curl_close($curl);
-
-    $json = json_decode($resp);
-break;
-
 default:
 break;
 }

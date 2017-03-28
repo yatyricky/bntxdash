@@ -26,7 +26,7 @@ class RobotPerformance extends React.Component {
         const xhr = new XMLHttpRequest();
         this.lastRequest = xhr;
 
-        xhr.open('POST', 'api/action.php');
+        xhr.open('POST', 'api/robotPerformance.php');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
         xhr.onload = () => {
             this.lastRequest = null;
@@ -42,7 +42,7 @@ class RobotPerformance extends React.Component {
                 });
             }
         };
-        xhr.send(encodeURI(`do=robot-analysis-performance&value=${this.refs.inputDate.value}`));
+        xhr.send(encodeURI(`date=${this.refs.inputDate.value}`));
         this.setState({flag: Flag.waiting});
     }
 
@@ -56,21 +56,20 @@ class RobotPerformance extends React.Component {
             let hands="";
             let bbalance="";
 
-            const entries = Object.keys(obj).map((k, index) => 
-                {
-                    actT+=obj[k][0]+",";
-                    hands+=obj[k][7]+",";
-                    bbalance+=obj[k][1]+",";
-                    return (
-                        <tr key={index}>
-                            <td className="text-right">{k}</td>
-                            <td className="text-right">{obj[k][0]}</td>
-                            <td className="text-right">{obj[k][7]}</td>
-                            <td className="text-right">{Number(obj[k][1]).toLocaleString()}</td>
-                        </tr>
-                    );
-                }
-            );
+            const arrayLength = Object.keys(obj).length;
+            const entries = Object.keys(obj).map((k, index) => {
+                actT+=obj[k]['playedBots']+(arrayLength === index + 1 ? "" : ",");
+                hands+=obj[k]['playedHands']+(arrayLength === index + 1 ? "" : ",");
+                bbalance+=obj[k]['balance']+(arrayLength === index + 1 ? "" : ",");
+                return (
+                    <tr key={index}>
+                        <td className="text-right">{k}</td>
+                        <td className="text-right">{obj[k]['playedBots']}</td>
+                        <td className="text-right">{obj[k]['playedHands']}</td>
+                        <td className="text-right">{Number(obj[k]['balance']).toLocaleString()}</td>
+                    </tr>
+                );
+            });
             return (
                 <div>
                     <div className="table-responsive">
