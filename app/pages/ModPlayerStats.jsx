@@ -21,7 +21,7 @@ class ModPlayerStats extends React.Component {
         const xhr = new XMLHttpRequest();
         this.lastRequest = xhr;
 
-        xhr.open('POST', 'api/action.php');
+        xhr.open('POST', 'api/modPlayerStats.php');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
         xhr.onload = () => {
             this.lastRequest = null;
@@ -38,7 +38,7 @@ class ModPlayerStats extends React.Component {
                 });
             }
         };
-        xhr.send(encodeURI(`do=mod-player-stats&server=${params.serverRadios}&accountId=${params.accountId}&diamonds=${params.diamonds}&chips=${params.chips}&vip=${params.vipRadios}`));
+        xhr.send(encodeURI(`server=${params.serverRadios}&accountId=${params.accountId}&diamonds=${params.diamonds}&chips=${params.chips}&vip=${params.vipRadios}`));
         this.setState({flag: Flag.waiting});
     }
 
