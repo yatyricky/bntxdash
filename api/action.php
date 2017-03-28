@@ -82,23 +82,6 @@ case 'mod-player-stats':
     }
 break;
 
-case 'concurrent-users':
-    $made = 'http://'.$config['serverProdZH'].':'.$config['portGS'].'/system/info';
-    
-    $curl = curl_init();
-    curl_setopt_array($curl, array(
-        CURLOPT_RETURNTRANSFER => 1,
-        CURLOPT_URL => $made,
-        CURLOPT_USERAGENT => 'Concurrent Users',
-        CURLOPT_POST => 1,
-        CURLOPT_POSTFIELDS => ""
-    ));
-    $resp = curl_exec($curl);
-    curl_close($curl);
-
-    $json['resp'] = $resp;
-break;
-
 case 'system-log':
     $array = array();
     $handle = fopen($config['pathSystemLog'], "r");

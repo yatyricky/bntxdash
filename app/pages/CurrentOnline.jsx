@@ -26,7 +26,7 @@ class CurrentOnline extends React.Component {
         const xhr = new XMLHttpRequest();
         this.lastRequest = xhr;
 
-        xhr.open('POST', 'api/action.php');
+        xhr.open('POST', 'api/currentOnline.php');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
         xhr.onload = () => {
             this.lastRequest = null;
@@ -42,7 +42,7 @@ class CurrentOnline extends React.Component {
                 });
             }
         };
-        xhr.send(encodeURI("do=concurrent-users"));
+        xhr.send(encodeURI(""));
         this.setState({flag: Flag.waiting});
     }
 
@@ -51,7 +51,7 @@ class CurrentOnline extends React.Component {
         switch (flag) {
             case Flag.success:
                 ret = (
-                    <div>{JSON.parse(this.state.result).resp}</div>
+                    <div>当前在线玩家：{this.state.result}</div>
                 );
                 break;
             case Flag.failed:
