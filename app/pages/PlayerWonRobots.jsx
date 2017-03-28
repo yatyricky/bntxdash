@@ -21,7 +21,7 @@ class PlayerWonRobots extends React.Component {
         const xhr = new XMLHttpRequest();
         this.lastRequest = xhr;
 
-        xhr.open('POST', 'api/api.php');
+        xhr.open('POST', 'api/playerWonRobots.php');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
         xhr.onload = () => {
             this.lastRequest = null;
@@ -37,48 +37,49 @@ class PlayerWonRobots extends React.Component {
                 });
             }
         };
-        xhr.send(encodeURI(`do=player-win-robots&start=${this.refs.inputDateStart.value}&end=${this.refs.inputDateEnd.value}`));
+        xhr.send(encodeURI(`start=${this.refs.inputDateStart.value}&end=${this.refs.inputDateEnd.value}`));
         this.setState({flag: Flag.waiting});
     }
 
     renderTable() {
-        let obj = null;
-        try {
-            obj = JSON.parse(this.state.result).data.sort(function(a, b) {
-                if (a[1] === b[1]) {
-                    return 0;
-                } else {
-                    return (a[1] < b[1]) ? -1 : 1;
-                }
-            });
-            const entries = obj.map((item, index) => 
-                {
-                    return (
-                        <tr key={index}>
-                            <td>{item[0]}</td>
-                            <td className="text-right">{item[1].toLocaleString()}</td>
-                        </tr>
-                    );
-                }
-            );
-            return (
-                <div className="table-responsive">
-                    <table className="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th className="text-right">盈利</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {entries}
-                        </tbody>
-                    </table>
-                </div>
-            );
-        } catch(e) {
-            return (<div>Javascript Error!</div>);
+        const tempObj = JSON.parse(this.state.result);
+        let obj = [];
+        for (let key in tempObj) {
+            obj.push([key, tempObj[key]]);
         }
+
+        obj.sort(function(a, b) {
+            if (a[1] === b[1]) {
+                return 0;
+            } else {
+                return (a[1] < b[1]) ? -1 : 1;
+            }
+        });
+        const entries = obj.map((item, index) => 
+            {
+                return (
+                    <tr key={index}>
+                        <td>{item[0]}</td>
+                        <td className="text-right">{item[1].toLocaleString()}</td>
+                    </tr>
+                );
+            }
+        );
+        return (
+            <div className="table-responsive">
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th className="text-right">盈利</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {entries}
+                    </tbody>
+                </table>
+            </div>
+        );
     }
 
     renderResult(flag) {

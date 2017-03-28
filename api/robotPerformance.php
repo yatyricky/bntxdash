@@ -104,7 +104,6 @@ foreach ($playedBots as $k => $v) {
     $count += 1;
 }
 
-$made = 'Check robot performance';
 echo json_encode($countList);
 
-Utils::writeServerLog($made);
+Utils::writeServerLog('Check robot performance');
