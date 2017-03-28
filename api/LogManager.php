@@ -19,23 +19,24 @@ class LogManager {
             $rawLoginPath = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'player_login'.DIRECTORY_SEPARATOR.$date.'.txt';
             $rawLogoutPath = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'player_logout'.DIRECTORY_SEPARATOR.$date.'.txt';
             if (file_exists($rawLoginPath) && file_exists($rawLogoutPath)) {
-                $arr = [];
+                $tempSet = [];
                 $lines = file($rawLoginPath);
                 for ($i = 0, $n = count($lines); $i < $n; $i++) {
                     $tokens = explode('|', trim($lines[$i]));
-                    if (isset($arr[$tokens[17]]) == false && $tokens[21] != '1') {
-                        $arr[$tokens[17]] = 1;
+                    if (isset($tempSet[$tokens[17]]) == false && $tokens[21] != '1') {
+                        $tempSet[$tokens[17]] = 1;
                     }
                 }
 
                 $lines = file($rawLogoutPath);
                 for ($i = 0, $n = count($lines); $i < $n; $i++) { 
                     $tokens = explode('|', trim($lines[$i]));
-                    if (isset($arr[$tokens[17]]) == false && $tokens[21] != '1') {
-                        $arr[$tokens[17]] = 1;
+                    if (isset($tempSet[$tokens[17]]) == false && $tokens[21] != '1') {
+                        $tempSet[$tokens[17]] = 1;
                     }
                 }
-                file_put_contents($fPath, join(PHP_EOL, array_keys($arr)), LOCK_EX);
+                $arr = array_keys($tempSet);
+                file_put_contents($fPath, join(PHP_EOL, $arr), LOCK_EX);
             } else {
                 $arr = [];
             }
@@ -57,15 +58,16 @@ class LogManager {
         } else {
             $rawPath = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'register'.DIRECTORY_SEPARATOR.$date.'.txt';
             if (file_exists($rawPath)) {
-                $arr = [];
+                $keySet = [];
                 $lines = file($rawPath);
                 for ($i = 0, $n = count($lines); $i < $n; $i++) { 
                     $playerId = explode('|', trim($lines[$i]))[13];
-                    if (isset($arr[$playerId]) == false) {
-                        $arr[$playerId] = 1;
+                    if (isset($keySet[$playerId]) == false) {
+                        $keySet[$playerId] = 1;
                     }
                 }
-                file_put_contents($fPath, join(PHP_EOL, array_keys($arr)), LOCK_EX);
+                $arr = array_keys($keySet);
+                file_put_contents($fPath, join(PHP_EOL, $arr), LOCK_EX);
             } else {
                 $arr = [];
             }
