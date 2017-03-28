@@ -4,61 +4,45 @@ require_once 'LogManager.php';
 require_once 'Utils.php';
 header('Access-Control-Allow-Origin: *');
 
-$date = $_POST['date'];
+$dateStart = $_POST['start'];
+$dateEnd = $_POST['end'];
 
-$pokerResult = LogManager::fetchPokerResult($date);
+$resPlayedBots = [];
+$countList = [];
 
-$playedBots = []; // Key: robot ID, Value: [won] => robot wins, [hands] => playedhands
-$playedBotsWithPlayers = []; // same as above
+$start = new DateTime($dateStart);
+$end = new DateTime($dateEnd);
+$dt = $start;
 
-foreach ($pokerResult as $key => $line) {
-    $lineTokens = explode(';', $line);
-    $findPlayer = false;
-    foreach ($lineTokens as $key1 => $lineToken) {
-        $lineTokenTokens = explode(',', trim($lineToken));
-        if (count($lineTokenTokens) == 8) {
-            if ($lineTokenTokens[7] == '0') {
-                $findPlayer = true;
-            }
-        }
-    }
-    foreach ($lineTokens as $key1 => $lineToken) {
-        $lineTokenTokens = explode(',', trim($lineToken));
-        if (count($lineTokenTokens) == 8) {
-            if ($lineTokenTokens[7] == '1') {
-                $idTokens = explode(':', $lineTokenTokens[0]);
-                $keyId = intval($idTokens[0]);
-                if (isset($playedBots[$keyId]) == false) {
-                    $playedBots[$keyId] = array(
-                        'won' => 0,
-                        'hands' => 0
-                    );
-                }
-                $playedBots[$keyId]['won'] += intval($lineTokenTokens[5]);
-                $playedBots[$keyId]['hands'] += 1;
-                if ($findPlayer == true) {
-                    if (isset($playedBotsWithPlayers[$keyId]) == false) {
-                        $playedBotsWithPlayers[$keyId] = array(
+while ($end >= $dt) {
+    $pokerResult = LogManager::fetchPokerResult($dt->format('Y-m-d'));
+
+    $playedBots = []; // Key: robot ID, Value: [won] => robot wins, [hands] => playedhands
+    foreach ($pokerResult as $key => $line) {
+        $lineTokens = explode(';', $line);
+        foreach ($lineTokens as $key1 => $lineToken) {
+            $lineTokenTokens = explode(',', trim($lineToken));
+            if (count($lineTokenTokens) == 8) {
+                if ($lineTokenTokens[7] == '1') {
+                    $idTokens = explode(':', $lineTokenTokens[0]);
+                    $keyId = intval($idTokens[0]);
+                    if (isset($playedBots[$keyId]) == false) {
+                        $playedBots[$keyId] = array(
                             'won' => 0,
                             'hands' => 0
                         );
                     }
-                    $playedBotsWithPlayers[$keyId]['won'] += intval($lineTokenTokens[5]);
-                    $playedBotsWithPlayers[$keyId]['hands'] += 1;
+                    $playedBots[$keyId]['won'] += intval($lineTokenTokens[5]);
+                    $playedBots[$keyId]['hands'] += 1;
                 }
             }
         }
     }
-}
 
-$rawObj = json_decode(LogManager::fetchRobotStatus('prod'), true);
-$countList = [];
-$typeList = [];
-
-foreach ($rawObj['robot_info'] as $key => $value) {
-    $typeList[intval($value['account_id'])] = $value['config_id'];
-    if (isset($countList[$value['config_id']]) == false) {
-        $countList[$value['config_id']] = array(
+    $dateFormat = $dt->format('Y-m-d');
+    $resPlayedBots[$dateFormat] = $playedBots;
+    for ($i = 1; $i <= 16; $i++) { 
+        $countList[$dateFormat][$i] = array(
             'playedBots' => 0,  // 0: # of played bots
             'balance' => 0,     // 1: chips balance
             'lostBots' => 0,    // 2: lost # of bots
@@ -69,40 +53,42 @@ foreach ($rawObj['robot_info'] as $key => $value) {
             'playedHands' => 0  // 7: played hands
         );
     }
+
+    $dt->modify('+1 day');
 }
 
-$count = 0;
-foreach ($playedBots as $k => $v) {
-    $key = -1;
-    if (isset($typeList[$k]) == true) {
-        $key = $typeList[$k];
+if (count($resPlayedBots) > 0) {
+    $rawObj = json_decode(LogManager::fetchRobotStatus('prod'), true);
+    $typeList = [];
+
+    foreach ($rawObj['robot_info'] as $key => $value) {
+        $typeList[intval($value['account_id'])] = $value['config_id'];
     }
-    if (isset($countList[$key]) == false) {
-        $countList[$key] = array(
-            'playedBots' => 0,
-            'balance' => 0,
-            'lostBots' => 0,
-            'drawBots' => 0,
-            'wonBots' => 0,
-            'lostChips' => 0,
-            'wonChips' => 0,
-            'playedHands' => 0
-        );
+
+    foreach ($resPlayedBots as $kDate => $vSet) {
+        foreach ($vSet as $k => $v) {
+            // get current bot type(key) based on bot id(k)
+            $key = -1;
+            if (isset($typeList[$k]) == true) {
+                $key = $typeList[$k];
+            }
+            if ($key > 0) {
+                $countList[$kDate][$key]['playedBots'] += 1;
+                $countList[$kDate][$key]['balance'] += $v['won'];
+                $countList[$kDate][$key]['playedHands'] += $v['hands'];
+                if ($v['won'] < 0) {
+                    $countList[$kDate][$key]['lostBots'] += 1;
+                    $countList[$kDate][$key]['lostChips'] += $v['won'];
+                } elseif ($v['won'] > 0) {
+                    $countList[$kDate][$key]['wonBots'] += 1;
+                    $countList[$kDate][$key]['wonChips'] += $v['won'];
+                } else {
+                    $countList[$kDate][$key]['drawBots'] += 1;
+                }
+            }
+        }
     }
-    $countList[$key]['playedBots'] += 1;
-    $countList[$key]['balance'] += $v['won'];
-    $countList[$key]['playedHands'] += $v['hands'];
-    if ($v['won'] < 0) {
-        $countList[$key]['lostBots'] += 1;
-        $countList[$key]['lostChips'] += $v['won'];
-    } elseif ($v['won'] > 0) {
-        $countList[$key]['wonBots'] += 1;
-        $countList[$key]['wonChips'] += $v['won'];
-    } else {
-        $countList[$key]['drawBots'] += 1;
-    }
-    $count += 1;
-}
+}    
 
 echo json_encode($countList);
 
