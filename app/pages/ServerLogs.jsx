@@ -26,7 +26,7 @@ class ServerLogs extends React.Component {
         const xhr = new XMLHttpRequest();
         this.lastRequest = xhr;
 
-        xhr.open('POST', 'api/action.php');
+        xhr.open('POST', 'api/serverLogs.php');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
         xhr.onload = () => {
             this.lastRequest = null;
@@ -42,14 +42,14 @@ class ServerLogs extends React.Component {
                 });
             }
         };
-        xhr.send(encodeURI("do=system-log"));
+        xhr.send(encodeURI(""));
         this.setState({flag: Flag.waiting});
     }
 
     renderTable() {
         let obj = null;
         try {
-            obj = JSON.parse(this.state.result).resp.reverse();
+            obj = JSON.parse(this.state.result).reverse();
 
             const entries = obj.map((item, index) => 
                 {
