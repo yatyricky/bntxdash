@@ -1,24 +1,21 @@
 import React from 'react';
-
-const Flag = {
-    "nothing": 100,
-    "waiting": 101,
-    "success": 200,
-    "failed": 300
-}
+import {Flag} from '../Flag.js';
 
 class RobotOnRetention extends React.Component {
 
     constructor() {
         super();
         this.postData = this.postData.bind(this);
+        this.validateValue = this.validateValue.bind(this);
         this.lastRequest = null;
+        this.targetDate = moment(new Date()).subtract(2, 'days');
         this.state = {
-            "flag": Flag.nothing
+            "flag": Flag.nothing,
+            "inputDateValue": this.targetDate.format('YYYY-MM-DD')
         }
     }
 
-    postData() {
+    postData(date) {
         if (this.lastRequest != null) {
             this.lastRequest.abort();
         }
@@ -43,8 +40,18 @@ class RobotOnRetention extends React.Component {
                 });
             }
         };
-        xhr.send(encodeURI(`date=${this.refs.inputDate.value}`));
+        xhr.send(encodeURI(`date=${date}`));
         this.setState({flag: Flag.waiting});
+    }
+
+    validateValue() {
+        let inputDate = moment(this.refs.inputDate.value);
+        if (inputDate > this.targetDate) {
+            inputDate = this.targetDate;
+        }
+        this.setState({inputDateValue: inputDate.format('YYYY-MM-DD')});
+        console.log('POST:'+inputDate.format('YYYY-MM-DD'));
+        this.postData(inputDate.format('YYYY-MM-DD'));
     }
 
     calcPercentage(a, b) {
@@ -144,13 +151,17 @@ class RobotOnRetention extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.postData(this.targetDate.format('YYYY-MM-DD'));
+    }
+
     render() {
         return (
             <div>
                 <h1 className="page-header">机器人对新玩家的留存影响</h1>
                 <form>
                     <span>选择日期：</span>
-                    <input type="date" ref="inputDate" className="input-sm" onChange={this.postData} />
+                    <input type="date" ref="inputDate" value={this.state.inputDateValue} className="input-sm" onChange={this.validateValue} />
                 </form>
                 <div>{this.renderResult(this.state.flag)}</div>
             </div>

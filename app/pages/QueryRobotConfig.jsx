@@ -82,6 +82,7 @@ class QueryRobotConfig extends React.Component {
                                     <th className="text-right">局数上</th>
                                     <th className="text-right">肉鸡</th>
                                     <th className="text-right">数量</th>
+                                    <th className="text-right">BB</th>
                                 </tr>
                             </thead>
                             <tbody>
