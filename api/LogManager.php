@@ -85,7 +85,7 @@ class LogManager {
                 $c11Contents = [];
                 $lines = file($rawPath);
                 for ($i = 0, $n = count($lines); $i < $n; $i++) { 
-                    $tokens = explode('|', trim($lines[$i]));
+                    $tokens = explode('|', $lines[$i]);
                     if (count($tokens) > 10) {
                         $c11Contents[] = $tokens[10];
                     }
@@ -94,12 +94,7 @@ class LogManager {
                 return $c11Contents;
             }
         } else {
-            $lines = file($fPath);
-            $arr = [];
-            for ($i = 0, $n = count($lines); $i < $n; $i++) { 
-                $arr[] = trim($lines[$i]);
-            }
-            return $arr;
+            return file($fPath, FILE_IGNORE_NEW_LINES);
         }
 
     }
