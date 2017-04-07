@@ -65,4 +65,4 @@ checkChurn($pwbl2, $pwbl2c, $pwbl2r, $dau);
 
 echo json_encode([count(array_keys($npwb0)),count(array_keys($npwbn)),count(array_keys($pwbw)),count(array_keys($pwbl1)),count(array_keys($pwbl2)),count(array_keys($npwb0r)),count(array_keys($npwbnr)),count(array_keys($pwbwr)),count(array_keys($pwbl1r)),count(array_keys($pwbl2r))]);
 
-Utils::writeServerLog($made);
+Utils::writeServerLog('Check robot on retention');
