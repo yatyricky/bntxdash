@@ -1,5 +1,5 @@
 import React from 'react';
-import {Flag} from '../Flag.js'
+import {Flag} from '../Flag.js';
 
 class PlayerWonRobots extends React.Component {
 
@@ -55,18 +55,20 @@ class PlayerWonRobots extends React.Component {
                 return (a[1] < b[1]) ? -1 : 1;
             }
         });
-        const entries = obj.map((item, index) => 
-            {
-                return (
-                    <tr key={index}>
-                        <td>{item[0]}</td>
-                        <td className="text-right">{item[1].toLocaleString()}</td>
-                    </tr>
-                );
-            }
-        );
+        let sum = 0;
+        const entries = obj.map((item, index) => {
+            sum += item[1];
+            return (
+                <tr key={index}>
+                    <td>{item[0]}</td>
+                    <td className="text-right">{item[1].toLocaleString()}</td>
+                </tr>
+            );
+        });
+        console.log(sum);
         return (
             <div className="table-responsive">
+                <div>合计：{sum.toLocaleString()}</div>
                 <table className="table table-striped">
                     <thead>
                         <tr>
