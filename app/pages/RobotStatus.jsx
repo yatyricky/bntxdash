@@ -1,6 +1,8 @@
 import React from 'react';
 import {Flag} from '../Flag.js';
 
+const moment = require('moment');
+
 class RobotTable extends React.Component {
 
     render() {
