@@ -41,6 +41,7 @@ class RobotTable extends React.Component {
                         })(Number(item.wake_time) * 1000, now)}</td>
                         <td>{item.config_id}</td>
                         <td>{item.exp_level}</td>
+                        <td>{item.vip}</td>
                         <td>{item.add_coin_times}</td>
                         <td>{item.change_time}</td>
                     </tr>
@@ -70,6 +71,7 @@ class RobotTable extends React.Component {
                                 <th>wake_time</th>
                                 <th>config_id</th>
                                 <th>exp_level</th>
+                                <th>vip</th>
                                 <th>add_coin_times</th>
                                 <th>change_time</th>
                             </tr>
