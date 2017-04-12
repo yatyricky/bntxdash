@@ -7,30 +7,14 @@ class LogManager {
     public static function fetchActiveUserIds($date) {
         $fPath = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'dau_ids'.DIRECTORY_SEPARATOR.'dau_id_'.$date.'.txt';
         if (file_exists($fPath)) {
-            $lines = file($fPath);
-            $arr = [];
-            for ($i = 0, $n = count($lines); $i < $n; $i++) { 
-                $tokens = explode(',', trim($lines[$i]));
-                if (count($tokens) > 0) {
-                    $arr[] = $tokens[0];
-                }
-            }
+            $arr = file($fPath, FILE_IGNORE_NEW_LINES);
         } else {
             $rawLoginPath = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'player_login'.DIRECTORY_SEPARATOR.$date.'.txt';
-            $rawLogoutPath = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'player_logout'.DIRECTORY_SEPARATOR.$date.'.txt';
-            if (file_exists($rawLoginPath) && file_exists($rawLogoutPath)) {
+            if (file_exists($rawLoginPath)) {
                 $tempSet = [];
-                $lines = file($rawLoginPath);
-                for ($i = 0, $n = count($lines); $i < $n; $i++) {
-                    $tokens = explode('|', trim($lines[$i]));
-                    if (isset($tempSet[$tokens[17]]) == false && $tokens[21] != '1') {
-                        $tempSet[$tokens[17]] = 1;
-                    }
-                }
-
-                $lines = file($rawLogoutPath);
-                for ($i = 0, $n = count($lines); $i < $n; $i++) { 
-                    $tokens = explode('|', trim($lines[$i]));
+                $lines = file($rawLoginPath, FILE_IGNORE_NEW_LINES);
+                foreach ($lines as $k => $v) {
+                    $tokens = explode('|', $v);
                     if (isset($tempSet[$tokens[17]]) == false && $tokens[21] != '1') {
                         $tempSet[$tokens[17]] = 1;
                     }
@@ -47,7 +31,7 @@ class LogManager {
     public static function fetchNewUserIds($date) {
         $fPath = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'register'.DIRECTORY_SEPARATOR.$date.'_accountID.txt';
         if (file_exists($fPath)) {
-            $lines = file($fPath);
+            $lines = file($fPath, FILE_IGNORE_NEW_LINES);
             $arr = [];
             for ($i = 0, $n = count($lines); $i < $n; $i++) { 
                 $tokens = explode(',', trim($lines[$i]));
@@ -59,7 +43,7 @@ class LogManager {
             $rawPath = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'register'.DIRECTORY_SEPARATOR.$date.'.txt';
             if (file_exists($rawPath)) {
                 $keySet = [];
-                $lines = file($rawPath);
+                $lines = file($rawPath, FILE_IGNORE_NEW_LINES);
                 for ($i = 0, $n = count($lines); $i < $n; $i++) { 
                     $playerId = explode('|', trim($lines[$i]))[13];
                     if (isset($keySet[$playerId]) == false) {
@@ -83,7 +67,7 @@ class LogManager {
                 return [];
             } else {
                 $c11Contents = [];
-                $lines = file($rawPath);
+                $lines = file($rawPath, FILE_IGNORE_NEW_LINES);
                 for ($i = 0, $n = count($lines); $i < $n; $i++) { 
                     $tokens = explode('|', $lines[$i]);
                     if (count($tokens) > 10) {
@@ -102,7 +86,7 @@ class LogManager {
     public static function fetchPlayerWonRobots($date) {
         $fPath = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'player_win_robots_logs'.DIRECTORY_SEPARATOR.'player_win_robots_'.$date.'.csv';
         if (file_exists($fPath)) {
-            $lines = file($fPath);
+            $lines = file($fPath, FILE_IGNORE_NEW_LINES);
             for ($i = 0, $n = count($lines); $i < $n; $i++) { 
                 $tokens = explode(',', trim($lines[$i]));
                 $obj[$tokens[0]] = floatval($tokens[1]);
