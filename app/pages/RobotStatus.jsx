@@ -1,9 +1,14 @@
 import React from 'react';
 import {Flag} from '../Flag.js';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 const moment = require('moment');
 
 class RobotTable extends React.Component {
+
+    numberFormatter(cell, row) {
+        return cell.toLocaleString();
+    }
 
     render() {
         const now = moment().valueOf();
@@ -11,43 +16,42 @@ class RobotTable extends React.Component {
         let sumGMCoins = 0;
         let online = 0;
         let uniqueTables = [];
-        const entries = this.props.list.map((item, index) => 
-            {
-                sumCoins += parseInt(item.coins);
-                sumGMCoins += parseInt(item.gm_add_coins);
-                online += parseInt(item.table_id) == 0 ? 0 : 1;
-                if (uniqueTables.indexOf(item.table_id) == -1) {
-                    uniqueTables.push(item.table_id);
-                }
-                return (
-                    <tr key={index}>
-                        <td>{item.account_id}</td>
-                        <td>{item.table_id}</td>
-                        <td>{item.nick_name}</td>
-                        <td className="text-right">{Number(item.coins).toLocaleString()}</td>
-                        <td className="text-right">{Number(item.gm_add_coins).toLocaleString()}</td>
-                        <td className="text-right">{(Number(item.coins) - Number(item.gm_add_coins) - 18888).toLocaleString()}</td>
-                        <td>{item.weight}</td>
-                        <td>{item.robot_type == 1 ? "Mimics" : "Follower"}</td>
-                        <td>{(function (roboTime, curTime) {
-                            // var botTimeStr = "(" + moment(roboTime).format() + ")";
-                            let botTimeStr = "";
-                            if (roboTime <= curTime) {
-                                return botTimeStr + "Awake";
-                            } else {
-                                let dur = moment.duration(roboTime - curTime);
-                                return botTimeStr + dur.hours() + ":" + dur.minutes() + ":" + dur.seconds();
-                            }
-                        })(Number(item.wake_time) * 1000, now)}</td>
-                        <td>{item.config_id}</td>
-                        <td>{item.exp_level}</td>
-                        <td>{item.vip}</td>
-                        <td>{item.add_coin_times}</td>
-                        <td>{item.change_time}</td>
-                    </tr>
-                );
+        let tableData = [];
+        for (let i = this.props.list.length - 1; i >= 0; i--) {
+            const item = this.props.list[i];
+            sumCoins += parseInt(item.coins);
+            sumGMCoins += parseInt(item.gm_add_coins);
+            online += parseInt(item.table_id) == 0 ? 0 : 1;
+            if (uniqueTables.indexOf(item.table_id) == -1) {
+                uniqueTables.push(item.table_id);
             }
-        );
+
+            tableData.push({
+                "account_id": item.account_id,
+                "table_id": item.table_id,
+                "nick_name": item.nick_name,
+                "coins": item.coins,
+                "gm_add_coins": item.gm_add_coins,
+                "won": Number(item.coins) - Number(item.gm_add_coins) - 18888,
+                "weight": item.weight,
+                "robot_type": item.robot_type == 1 ? "Mimics" : "Follower",
+                "wake_time": (function (roboTime, curTime) {
+                    let botTimeStr = "";
+                    if (roboTime <= curTime) {
+                        return botTimeStr + "Awake";
+                    } else {
+                        let dur = moment.duration(roboTime - curTime);
+                        return botTimeStr + dur.hours() + ":" + dur.minutes() + ":" + dur.seconds();
+                    }
+                })(Number(item.wake_time) * 1000, now),
+                "config_id": item.config_id,
+                "exp_level": item.exp_level,
+                "vip": item.vip,
+                "add_coin_times": item.add_coin_times,
+                "change_time": item.change_time
+            });
+        }
+
         return (
             <div>
                 <div className="row">
@@ -56,31 +60,22 @@ class RobotTable extends React.Component {
                     <span className="col-xs-3"><label>总赢取：</label>{(sumCoins - sumGMCoins - 18888 * this.props.list.length).toLocaleString()}</span>
                     <span className="col-xs-3"><label>牌桌数：</label>{uniqueTables.length - 1}</span>
                 </div>
-                <div className="table-responsive">
-                    <table className="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>account_id</th>
-                                <th>table_id</th>
-                                <th>nick_name</th>
-                                <th className="text-right">coins</th>
-                                <th className="text-right">gm_add_coins</th>
-                                <th className="text-right">won</th>
-                                <th>weight</th>
-                                <th>robot_type</th>
-                                <th>wake_time</th>
-                                <th>config_id</th>
-                                <th>exp_level</th>
-                                <th>vip</th>
-                                <th>add_coin_times</th>
-                                <th>change_time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {entries}
-                        </tbody>
-                    </table>
-                </div>
+                <BootstrapTable data={tableData} striped={true}>
+                    <TableHeaderColumn dataField="account_id" isKey={true} dataSort={true}>account_id</TableHeaderColumn>
+                    <TableHeaderColumn dataField="table_id" dataSort={true}>table_id</TableHeaderColumn>
+                    <TableHeaderColumn dataField="nick_name">nick_name</TableHeaderColumn>
+                    <TableHeaderColumn dataField="coins" dataSort={true} dataFormat={this.numberFormatter} dataAlign="right">coins</TableHeaderColumn>
+                    <TableHeaderColumn dataField="gm_add_coins" dataSort={true} dataFormat={this.numberFormatter} dataAlign="right">gm_add_coins</TableHeaderColumn>
+                    <TableHeaderColumn dataField="won" dataSort={true} dataFormat={this.numberFormatter} dataAlign="right">won</TableHeaderColumn>
+                    <TableHeaderColumn dataField="weight" dataSort={true}>weight</TableHeaderColumn>
+                    <TableHeaderColumn dataField="robot_type" dataSort={true}>robot_type</TableHeaderColumn>
+                    <TableHeaderColumn dataField="wake_time" dataSort={true}>wake_time</TableHeaderColumn>
+                    <TableHeaderColumn dataField="config_id" dataSort={true}>config_id</TableHeaderColumn>
+                    <TableHeaderColumn dataField="exp_level" dataSort={true}>exp_level</TableHeaderColumn>
+                    <TableHeaderColumn dataField="vip" dataSort={true}>vip</TableHeaderColumn>
+                    <TableHeaderColumn dataField="add_coin_times" dataSort={true}>add_coin_times</TableHeaderColumn>
+                    <TableHeaderColumn dataField="change_time" dataSort={true}>change_time</TableHeaderColumn>
+                </BootstrapTable>
             </div>
         );
     }
