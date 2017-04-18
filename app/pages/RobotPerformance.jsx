@@ -27,8 +27,7 @@ class RobotPerformance extends React.Component {
         const xhr = new XMLHttpRequest();
         this.lastRequest = xhr;
 
-        xhr.open('POST', 'api/robotPerformance.php');
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
+        xhr.open('GET', `api/robotPerformance.php?start=${this.refs.inputDateStart.value}&end=${this.refs.inputDateEnd.value}`);
         xhr.onload = () => {
             this.lastRequest = null;
             if (xhr.status === 200) {
@@ -36,14 +35,14 @@ class RobotPerformance extends React.Component {
                     flag: Flag.success,
                     result: xhr.responseText
                 });
-            } else if (xhr.status !== 200) {
+            } else {
                 this.setState({
                     flag: Flag.failed,
                     result: xhr.status
                 });
             }
         };
-        xhr.send(encodeURI(`start=${this.refs.inputDateStart.value}&end=${this.refs.inputDateEnd.value}`));
+        xhr.send();
         this.setState({flag: Flag.waiting});
     }
 

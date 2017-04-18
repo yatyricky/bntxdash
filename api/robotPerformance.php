@@ -4,8 +4,8 @@ require_once 'LogManager.php';
 require_once 'Utils.php';
 header('Access-Control-Allow-Origin: *');
 
-$dateStart = $_POST['start'];
-$dateEnd = $_POST['end'];
+$dateStart = $_GET['start'];
+$dateEnd = $_GET['end'];
 
 $resPlayedBots = [];
 $countList = [];
