@@ -58,14 +58,8 @@ while ($end >= $dt) {
 }
 
 if (count($resPlayedBots) > 0) {
-    $rawObj = json_decode(LogManager::fetchRobotStatus('prod'), true);
-    $typeList = [];
-
-    foreach ($rawObj['robot_info'] as $key => $value) {
-        $typeList[intval($value['account_id'])] = $value['config_id'];
-    }
-
     foreach ($resPlayedBots as $kDate => $vSet) {
+        $typeList = LogManager::fetchRobotConfig($kDate);
         foreach ($vSet as $k => $v) {
             // get current bot type(key) based on bot id(k)
             $key = -1;

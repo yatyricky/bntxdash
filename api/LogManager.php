@@ -161,4 +161,18 @@ class LogManager {
 
         return $resp;
     }
+
+    public static function fetchRobotConfig($date) {
+        $path = $GLOBALS['robotConfigDir'].DIRECTORY_SEPARATOR.'robot_ids_'.$date.'.csv';
+        if (file_exists($path) == false) {
+            $path = $GLOBALS['robotConfigDir'].DIRECTORY_SEPARATOR.'robot_ids.csv';
+        }
+        $arr = [];
+        $lines = file($path, FILE_IGNORE_NEW_LINES);
+        foreach ($lines as $k => $v) {
+            $vs = explode(',', $v);
+            $arr[$vs[0]] = $vs[1];
+        }
+        return $arr;
+    }
 }
