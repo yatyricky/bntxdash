@@ -12,6 +12,9 @@ switch ($_POST['server']) {
     case 'prod':
         $server = $GLOBALS['serverProdZH'];
         break;
+    case 'proden':
+        $server = $GLOBALS['serverProdEN'];
+        break;
     case 'beta':
         $server = $GLOBALS['serverBeta'];
         break;

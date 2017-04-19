@@ -106,6 +106,11 @@ class ModPlayerStats extends React.Component {
                                     <input type="radio" name="serverRadios" value="prod" />中文正式服
                                 </label>
                             </div>
+                            <div className="col-xs-2">
+                                <label className="radio-inline">
+                                    <input type="radio" name="serverRadios" value="proden" />英文正式服
+                                </label>
+                            </div>
                         </div>
                         <div className="form-group">
                             <label className="control-label col-xs-3">玩家ID：</label>
