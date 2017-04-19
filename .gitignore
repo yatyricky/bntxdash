@@ -1,5 +1,6 @@
-bntxdash.log
+*.log
 *.csv
 node_modules
 bundle.js
 config.php
+test.php
