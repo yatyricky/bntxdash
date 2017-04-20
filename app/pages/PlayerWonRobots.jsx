@@ -65,7 +65,6 @@ class PlayerWonRobots extends React.Component {
                 </tr>
             );
         });
-        console.log(sum);
         return (
             <div className="table-responsive">
                 <div>合计：{sum.toLocaleString()}</div>

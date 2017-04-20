@@ -19,22 +19,16 @@ while ($end >= $dt) {
 
     $playedBots = []; // Key: robot ID, Value: [won] => robot wins, [hands] => playedhands
     foreach ($pokerResult as $key => $line) {
-        $lineTokens = explode(';', $line);
-        foreach ($lineTokens as $key1 => $lineToken) {
-            $lineTokenTokens = explode(',', trim($lineToken));
-            if (count($lineTokenTokens) == 8) {
-                if ($lineTokenTokens[7] == '1') {
-                    $idTokens = explode(':', $lineTokenTokens[0]);
-                    $keyId = intval($idTokens[0]);
-                    if (isset($playedBots[$keyId]) == false) {
-                        $playedBots[$keyId] = array(
-                            'won' => 0,
-                            'hands' => 0
-                        );
-                    }
-                    $playedBots[$keyId]['won'] += intval($lineTokenTokens[5]);
-                    $playedBots[$keyId]['hands'] += 1;
+        foreach ($line['players'] as $key1 => $lineToken) {
+            if ($lineToken['isRobot'] == 1) {
+                if (isset($playedBots[$lineToken['id']]) == false) {
+                    $playedBots[$lineToken['id']] = array(
+                        'won' => 0,
+                        'hands' => 0
+                    );
                 }
+                $playedBots[$lineToken['id']]['won'] += $lineToken['win'];
+                $playedBots[$lineToken['id']]['hands'] += 1;
             }
         }
     }

@@ -59,85 +59,149 @@ class LogManager {
         return $arr;
     }
 
+    /**
+     *  [
+     *      {
+     *          "players": [
+     *              {
+     *                  "id": old1 | new1,
+     *                  "handPoker": old2 | new2,
+     *                  "bet": old5 | new3,
+     *                  "get": old6 / 0.95 | new4,
+     *                  "modRake": old6 / 19.0 | new5,
+     *                  "modAntiadc": old6 - old7 | new6,
+     *                  "modItem": 0 | new7,
+     *                  "win": old8 | new8,
+     *                  "status": old9 | new9,
+     *                  "isRobot": old10 | new10
+     *              }
+     *          ],
+     *          "misswin": 0 | row14
+     *      }
+     *  ]
+     */
     public static function fetchPokerResult($date) {
-        $fPath = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'poker_result'.DIRECTORY_SEPARATOR.$date.'_c11.txt';
-        if (!file_exists($fPath)) {
-            $rawPath = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'poker_result'.DIRECTORY_SEPARATOR.$date.'.txt';
-            if (!file_exists($rawPath)) {
-                return [];
-            } else {
-                $c11Contents = [];
-                $lines = file($rawPath, FILE_IGNORE_NEW_LINES);
-                for ($i = 0, $n = count($lines); $i < $n; $i++) { 
-                    $tokens = explode('|', $lines[$i]);
-                    if (count($tokens) > 10) {
-                        $c11Contents[] = $tokens[10];
+        $oldC11Path = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'poker_result'.DIRECTORY_SEPARATOR.$date.'_c11.txt';
+        if (file_exists($oldC11Path)) {
+            // old log, extracted column 11
+            $arr = [];
+            $c11Contents = file($oldC11Path, FILE_IGNORE_NEW_LINES);
+            foreach ($c11Contents as $k => $v) {
+                $obj['players'] = [];
+                $obj['misswin'] = 0;
+                $vs = explode(';', $v);
+                foreach ($vs as $kk => $vv) {
+                    if (strlen($vv) > 0) {
+                        $vvs = preg_split("/[,:]/", $vv);
+                        $obj['players'][] = array(
+                            'id' => intval($vvs[0]),
+                            'handPoker' => $vvs[1],
+                            'bet' => floatval($vvs[4]),
+                            'get' => floatval($vvs[5]) / 0.95,
+                            'modRake' => floatval($vvs[5]) / 19.0,
+                            'modAntiadc' => floatval($vvs[5]) - floatval($vvs[6]),
+                            'modItem' => 0,
+                            'win' => floatval($vvs[7]),
+                            'status' => intval($vvs[8]),
+                            'isRobot' => intval($vvs[9])
+                        );
                     }
                 }
-                file_put_contents($fPath, join(PHP_EOL, $c11Contents), LOCK_EX);
-                return $c11Contents;
+                $arr[] = $obj;
             }
+            return $arr;
         } else {
-            return file($fPath, FILE_IGNORE_NEW_LINES);
+            $rawPath = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'poker_result'.DIRECTORY_SEPARATOR.$date.'.txt';
+            if (file_exists($rawPath)) {
+                $arr = [];
+                $lines = file($rawPath, FILE_IGNORE_NEW_LINES);
+                foreach ($lines as $k => $v) {
+                    $obj['players'] = [];
+                    $obj['misswin'] = 0;
+
+                    $vs = explode('|', $v);
+                    $c11s = explode(';', $vs[10]);
+                    foreach ($c11s as $kk => $vv) {
+                        if (strlen($vv) > 0) {
+                            $vvs = preg_split("/[,:]/", $vv);
+                            if (count($vs) < 17) {
+                                // old log, not extracted
+                                $obj['players'][] = array(
+                                    'id' => intval($vvs[0]),
+                                    'handPoker' => $vvs[1],
+                                    'bet' => floatval($vvs[4]),
+                                    'get' => floatval($vvs[5]) / 0.95,
+                                    'modRake' => floatval($vvs[5]) / 19.0,
+                                    'modAntiadc' => floatval($vvs[5]) - floatval($vvs[6]),
+                                    'modItem' => 0,
+                                    'win' => floatval($vvs[7]),
+                                    'status' => intval($vvs[8]),
+                                    'isRobot' => intval($vvs[9])
+                                );
+                            } else {
+                                // new log
+                                $obj['players'][] = array(
+                                    'id' => intval($vvs[0]),
+                                    'handPoker' => $vvs[1],
+                                    'bet' => floatval($vvs[2]),
+                                    'get' => floatval($vvs[3]),
+                                    'modRake' => floatval($vvs[4]),
+                                    'modAntiadc' => floatval($vvs[5]),
+                                    'modItem' => floatval($vvs[6]),
+                                    'win' => floatval($vvs[3]) - floatval($vvs[2]) - floatval($vvs[4]) - floatval($vvs[5]) + floatval($vvs[6]),
+                                    'status' => intval($vvs[8]),
+                                    'isRobot' => intval($vvs[9])
+                                );
+                            }
+                        }
+                    }
+                    if (count($vs) >= 17) {
+                        $obj['misswin'] = floatval($vs[13]);
+                    }
+                    $arr[] = $obj;
+                }
+                return $arr;
+            } else {
+                // no log file, return empty
+                return [];
+            }
         }
 
     }
 
     public static function fetchPlayerWonRobots($date) {
-        $fPath = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'player_win_robots_logs'.DIRECTORY_SEPARATOR.'player_win_robots_'.$date.'.csv';
-        if (file_exists($fPath)) {
-            $lines = file($fPath, FILE_IGNORE_NEW_LINES);
-            for ($i = 0, $n = count($lines); $i < $n; $i++) { 
-                $tokens = explode(',', trim($lines[$i]));
-                $obj[$tokens[0]] = floatval($tokens[1]);
+        $data = self::fetchPokerResult($date);
+        if (count($data) > 0) {
+            $robotList = [];
+            $winnerList = [];
+
+            foreach ($data as $k => $v) {
+                // find if robot exists on the game table
+                $found = 0;
+                $tempSet = [];
+
+                foreach ($v['players'] as $kk => $vv) {
+                    $tempSet[$vv['id']] = $vv['win'];
+                    if ($vv['isRobot'] == 1) {
+                        $robotList[$vv['id']] = 1;
+                        $found = 1;
+                    }
+                }
+
+                if ($found == 1) {
+                    foreach ($tempSet as $key => $value) {
+                        if (isset($robotList[$key]) == false) {
+                            if (isset($winnerList[$key]) == false) {
+                                $winnerList[$key] = 0;
+                            }
+                            $winnerList[$key] += $value;
+                        }
+                    }
+                }
             }
-            return $obj;
+            return $winnerList;
         } else {
-            $data = self::fetchPokerResult($date);
-            if (count($data) > 0) {
-                $robotList = [];
-                $winnerList = [];
-
-                for ($i = 0, $n = count($data); $i < $n; $i++) {
-                    $players = explode(';', $data[$i]);
-
-                    // find if robot exists on the game table
-                    $found = 0;
-                    $tempSet = [];
-                    for ($j = 0, $m = count($players); $j < $m; $j++) { 
-                        $tokens = explode(',', trim($players[$j]));
-                        if (count($tokens) == 8) {
-                            $idTokens = explode(':', $tokens[0]);
-                            $tempSet[$idTokens[0]] = floatval($tokens[5]);
-                            if (intval($tokens[7]) == 1) {
-                                $robotList[$idTokens[0]] = 1;
-                                $found = 1;
-                            }
-                        }
-                    }
-
-                    if ($found == 1) {
-                        foreach ($tempSet as $key => $value) {
-                            if (isset($robotList[$key]) == false) {
-                                if (isset($winnerList[$key]) == false) {
-                                    $winnerList[$key] = 0;
-                                }
-                                $winnerList[$key] += $value;
-                            }
-                        }
-                    }
-                }
-
-                $output = '';
-                foreach ($winnerList as $key => $value) {
-                    $output .= $key.','.$value."\n";
-                }
-
-                file_put_contents($fPath, $output, LOCK_EX);
-                return $winnerList;
-            } else {
-                return [];
-            }
+            return [];
         }
     }
 
