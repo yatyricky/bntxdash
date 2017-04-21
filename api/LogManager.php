@@ -169,6 +169,21 @@ class LogManager {
 
     }
 
+    public static function fetchPropertyChangePlayerChips($date) {
+        $fPath = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'property_change'.DIRECTORY_SEPARATOR.$date.'.txt';
+        $arr = [];
+        if (file_exists($fPath)) {
+            $lines = file($fPath, FILE_IGNORE_NEW_LINES);
+            foreach ($lines as $k => $v) {
+                $vs = explode('|', $v);
+                if ($vs[26] == '1' && $vs[21] == '0') {
+                    $arr[intval($vs[17])] = floatval($vs[28]);
+                }
+            }
+        }
+        return $arr;
+    }
+
     public static function fetchPlayerWonRobots($date) {
         $data = self::fetchPokerResult($date);
         if (count($data) > 0) {
