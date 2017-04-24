@@ -169,6 +169,15 @@ class LogManager {
 
     }
 
+    public static function fetchPropertyChange($date) {
+        $fPath = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'property_change'.DIRECTORY_SEPARATOR.$date.'.txt';
+        if (file_exists($fPath)) {
+            return file($fPath, FILE_IGNORE_NEW_LINES);
+        } else {
+            return [];
+        }
+    }
+
     public static function fetchPropertyChangePlayerChips($date) {
         $fPath = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'property_change'.DIRECTORY_SEPARATOR.$date.'.txt';
         $arr = [];

@@ -10,10 +10,11 @@ import RobotCoinsSum from './pages/RobotCoinsSum.jsx';
 import QueryRobotConfig from './pages/QueryRobotConfig.jsx';
 import RobotOnRetention from './pages/RobotOnRetention.jsx';
 import RobotPerformance from './pages/RobotPerformance.jsx';
-import PlayerWonRobots from './pages/PlayerWonRobots.jsx';
 
 import CurrentOnline from './pages/CurrentOnline.jsx';
 import ModPlayerStats from './pages/ModPlayerStats.jsx';
+import PlayerChipsChange from './pages/PlayerChipsChange.jsx';
+import PlayerWonRobots from './pages/PlayerWonRobots.jsx';
 
 import ServerLogs from './pages/ServerLogs.jsx';
 
@@ -28,10 +29,11 @@ class Main extends React.Component {
                     <Route path="queryRobotConfig" name="queryRobotConfig" component={QueryRobotConfig}></Route>
                     <Route path="robotOnRetention" name="robotOnRetention" component={RobotOnRetention}></Route>
                     <Route path="robotPerformance" name="robotPerformance" component={RobotPerformance}></Route>
-                    <Route path="playerWonRobots" name="playerWonRobots" component={PlayerWonRobots}></Route>
 
                     <Route path="currentOnline" name="currentOnline" component={CurrentOnline}></Route>
                     <Route path="modPlayerStats" name="modPlayerStats" component={ModPlayerStats}></Route>
+                    <Route path="playerChipsChange" name="playerChipsChange" component={PlayerChipsChange}></Route>
+                    <Route path="playerWonRobots" name="playerWonRobots" component={PlayerWonRobots}></Route>
 
                     <Route path="serverLogs" name="serverLogs" component={ServerLogs}></Route>
                 </Route>

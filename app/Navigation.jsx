@@ -81,9 +81,6 @@ class Navigation extends React.Component {
                     }, {
                         "text": "机器人每日牌局表现",
                         "to": "robotPerformance"
-                    }, {
-                        "text": "玩家赢取机器人筹码",
-                        "to": "playerWonRobots"
                     }
                 ]
             }, {
@@ -95,6 +92,12 @@ class Navigation extends React.Component {
                     }, {
                         "text": "修改玩家属性",
                         "to": "modPlayerStats"
+                    }, {
+                        "text": "玩家筹码变动",
+                        "to": "playerChipsChange"
+                    }, {
+                        "text": "玩家赢取机器人筹码",
+                        "to": "playerWonRobots"
                     }
                 ]
             }, {

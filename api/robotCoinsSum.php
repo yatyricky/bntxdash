@@ -32,12 +32,13 @@ try {
         $obj = [];
         $obj['date'] = $dt->format('Y-m-d');
         $sysChange = LogManager::fetchPropertyChangeRobotSysMod($obj['date']);
+        $winLost = Computation::winLost($obj['date']);
 
         $obj['sum'] = $dailySumArr[$obj['date']]['sum'] ?? 0;
-        $obj['grossWin'] = Computation::winLost($obj['date'])['rwin'];
+        $obj['grossWin'] = $winLost['rwin'];
         $obj['sysAdd'] = $sysChange['add'];
 
-        $obj['lost'] = Computation::winLost($obj['date'])['rlost'];
+        $obj['lost'] = $winLost['rlost'];
         $obj['sysDeduct'] = $sysChange['deduct'];
         $obj['rake'] = Computation::rake($obj['date'])['robot'];
 
