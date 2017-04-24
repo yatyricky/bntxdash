@@ -27,7 +27,9 @@ class RobotPerformance extends React.Component {
         const xhr = new XMLHttpRequest();
         this.lastRequest = xhr;
 
-        xhr.open('GET', `api/robotPerformance.php?start=${this.refs.inputDateStart.value}&end=${this.refs.inputDateEnd.value}`);
+        let request = `api/robotPerformance.php?start=${this.refs.inputDateStart.value.replace(/-/g, "")}&end=${this.refs.inputDateEnd.value.replace(/-/g, "")}`;
+
+        xhr.open('GET', request);
         xhr.onload = () => {
             this.lastRequest = null;
             if (xhr.status === 200) {
