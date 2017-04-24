@@ -184,6 +184,28 @@ class LogManager {
         return $arr;
     }
 
+    public static function fetchPropertyChangeRobotSysMod($date) {
+        $fPath = $GLOBALS['grootDir'].DIRECTORY_SEPARATOR.'property_change'.DIRECTORY_SEPARATOR.$date.'.txt';
+        $arr = [];
+        $arr['add'] = 0;
+        $arr['deduct'] = 0;
+        if (file_exists($fPath)) {
+            $lines = file($fPath, FILE_IGNORE_NEW_LINES);
+            foreach ($lines as $k => $v) {
+                $vs = explode('|', $v);
+                if ($vs[21] == '1' && $vs[26] == '1' && $vs[27] == '39') {
+                    $val = floatval($vs[29]);
+                    if ($val > 0) {
+                        $arr['add'] += $val;
+                    } else {
+                        $arr['deduct'] += $val;
+                    }
+                }
+            }
+        }
+        return $arr;
+    }
+
     public static function fetchPlayerWonRobots($date) {
         $data = self::fetchPokerResult($date);
         if (count($data) > 0) {
