@@ -106,6 +106,7 @@ while ($end >= $dt) {
     }
 
     $obj['store'] = $storeOfDay;
+    $obj['avgStore'] = $storeOfDay / count($storeOfDayRecord);
 
     // win and lost
     $obj['grossWin'] = 0;

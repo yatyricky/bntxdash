@@ -69,6 +69,7 @@ class PlayerChipsChange extends React.Component {
                     <td className="text-right">{Number(item.rake).toLocaleString()}</td>
                     <td className="text-right">{Number(item.otherRecycle).toLocaleString()}</td>
                     <td className="text-right">{Number(balance).toLocaleString()}</td>
+                    <td className="text-right">{Number(item.avgStore).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                 </tr>
             );
         });
@@ -87,6 +88,7 @@ class PlayerChipsChange extends React.Component {
                         <th className="text-right">抽水</th>
                         <th className="text-right">其他消耗</th>
                         <th className="text-right">平衡</th>
+                        <th className="text-right">人均持币</th>
                     </tr>
                 </thead>
                 <tbody>
