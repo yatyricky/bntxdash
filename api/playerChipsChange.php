@@ -1,4 +1,5 @@
 <?php
+ini_set('max_execution_time', 300);
 require_once 'LogManager.php';
 
 $dateStart = $_GET['start'];
@@ -135,5 +136,10 @@ while ($end >= $dt) {
     $dt->modify('+1 day');
 }
 
-echo json_encode($arr);
+$all = [];
+$all['arr'] = $arr;
+$all['sum'] = $storeSum;
+$all['avgSum'] = $storeSum / count($storeSumRecord);
+
+echo json_encode($all);
 // Utils::writeServerLog('Check system robot sum');

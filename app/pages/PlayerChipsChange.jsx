@@ -54,9 +54,27 @@ class PlayerChipsChange extends React.Component {
     }
 
     renderTable() {
-        const entries = this.state.result.map((item, i) => {
+        let sumGrossWin = 0;
+        let sumLost = 0;
+        let sumRobotProd = 0;
+        let sumDiamonds = 0;
+        let sumOtherProd = 0;
+        let sumRake = 0;
+        let sumOtherRecycle = 0;
+        let sumBalance = 0;
+
+        const entries = this.state.result.arr.map((item, i) => {
             const robotProd = item.grossWin + item.lost - item.rake;
             const balance = robotProd + item.diamonds + item.otherProd + item.otherRecycle;
+
+            sumGrossWin += item.grossWin;
+            sumLost += item.lost;
+            sumRobotProd += robotProd;
+            sumDiamonds += item.diamonds;
+            sumOtherProd += item.otherProd;
+            sumRake += item.rake;
+            sumOtherRecycle += item.otherRecycle;
+            sumBalance += balance;
             return (
                 <tr key={i}>
                     <td>{item.date}</td>
@@ -69,10 +87,25 @@ class PlayerChipsChange extends React.Component {
                     <td className="text-right">{Number(item.rake).toLocaleString()}</td>
                     <td className="text-right">{Number(item.otherRecycle).toLocaleString()}</td>
                     <td className="text-right">{Number(balance).toLocaleString()}</td>
-                    <td className="text-right">{Number(item.avgStore).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                    <td className="text-right">{Math.floor(item.avgStore).toLocaleString()}</td>
                 </tr>
             );
         });
+        entries.push(
+            <tr key={999}>
+                <td><strong>合计</strong></td>
+                <td className="text-right"><strong>{Number(this.state.result.sum).toLocaleString()}</strong></td>
+                <td className="text-right"><strong>{Number(sumGrossWin).toLocaleString()}</strong></td>
+                <td className="text-right"><strong>{Number(sumLost).toLocaleString()}</strong></td>
+                <td className="text-right"><strong>{Number(sumRobotProd).toLocaleString()}</strong></td>
+                <td className="text-right"><strong>{Number(sumDiamonds).toLocaleString()}</strong></td>
+                <td className="text-right"><strong>{Number(sumOtherProd).toLocaleString()}</strong></td>
+                <td className="text-right"><strong>{Number(sumRake).toLocaleString()}</strong></td>
+                <td className="text-right"><strong>{Number(sumOtherRecycle).toLocaleString()}</strong></td>
+                <td className="text-right"><strong>{Number(sumBalance).toLocaleString()}</strong></td>
+                <td className="text-right"><strong>{Math.floor(this.state.result.avgSum).toLocaleString()}</strong></td>
+            </tr>
+        );
 
         return (
             <table className="table table-striped">
