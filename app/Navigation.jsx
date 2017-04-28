@@ -87,6 +87,9 @@ class Navigation extends React.Component {
                 "category": "玩家",
                 "options": [
                     {
+                        "text": "留存率",
+                        "to": "playerRetention"
+                    }, {
                         "text": "当前在线玩家",
                         "to": "currentOnline"
                     }, {

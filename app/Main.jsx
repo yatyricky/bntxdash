@@ -11,6 +11,7 @@ import QueryRobotConfig from './pages/QueryRobotConfig.jsx';
 import RobotOnRetention from './pages/RobotOnRetention.jsx';
 import RobotPerformance from './pages/RobotPerformance.jsx';
 
+import PlayerRetention from './pages/PlayerRetention.jsx';
 import CurrentOnline from './pages/CurrentOnline.jsx';
 import ModPlayerStats from './pages/ModPlayerStats.jsx';
 import PlayerChipsChange from './pages/PlayerChipsChange.jsx';
@@ -30,6 +31,7 @@ class Main extends React.Component {
                     <Route path="robotOnRetention" name="robotOnRetention" component={RobotOnRetention}></Route>
                     <Route path="robotPerformance" name="robotPerformance" component={RobotPerformance}></Route>
 
+                    <Route path="playerRetention" name="playerRetention" component={PlayerRetention}></Route>
                     <Route path="currentOnline" name="currentOnline" component={CurrentOnline}></Route>
                     <Route path="modPlayerStats" name="modPlayerStats" component={ModPlayerStats}></Route>
                     <Route path="playerChipsChange" name="playerChipsChange" component={PlayerChipsChange}></Route>

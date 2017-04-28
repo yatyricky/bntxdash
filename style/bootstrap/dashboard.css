@@ -104,6 +104,10 @@
   margin: 5px;
 }
 
+.font-small {
+  font-size: 0.9em;
+}
+
 .loader,
 .loader:before,
 .loader:after {
