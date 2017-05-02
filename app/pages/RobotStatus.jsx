@@ -154,6 +154,7 @@ class RobotStatus extends React.Component {
                 <h1 className="page-header">选择一个服务器以查看</h1>
                 <button className="btn" onClick={() => this.postData("beta")}>外网测试服</button>
                 <button className="btn" onClick={() => this.postData("prod")}>中文正式服</button>
+                <button className="btn" onClick={() => this.postData("proden")}>英文正式服</button>
                 <div>{this.renderResult(this.state.flag)}</div>
             </div>
         );

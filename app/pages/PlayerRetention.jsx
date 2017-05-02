@@ -62,7 +62,7 @@ class PlayerRetention extends React.Component {
         for (let i = 0, n = result.length; i < n; i++) {
             let cols = [];
             for (let j = 0; j < result[i].retentions.length; j++) {
-                let green = result[i].retentions[j] / 0.35;
+                let green = (result[i].retentions[j] - 0.05) / 0.45;
                 if (green < 0) {
                     green = 0;
                 } else if (green > 1) {
@@ -72,7 +72,7 @@ class PlayerRetention extends React.Component {
                     "backgroundColor": `rgba(0,255,0,${green})`
                 }
                 cols.push(
-                    <td key={j} className="text-right font-small" style={style}>{(result[i].retentions[j] * 100).toFixed(2)}</td>
+                    <td key={j} className="text-right font-small" style={style}>{result[i].retentions[j] == 0.0 ? "-" : (result[i].retentions[j] * 100).toFixed(2)}</td>
                 );
             }
             entries.push(

@@ -252,9 +252,16 @@ class LogManager {
     }
 
     public static function fetchRobotStatus($svr) {
-        $server = $GLOBALS['serverBeta'];
-        if ($svr == 'prod') {
-            $server = $GLOBALS['serverProdZH'];
+        switch ($svr) {
+            case 'prod':
+                $server = $GLOBALS['serverProdZH'];
+                break;
+            case 'proden':
+                $server = $GLOBALS['serverProdEN'];
+                break;
+            default:
+                $server = $GLOBALS['serverBeta'];
+                break;
         }
         $made = 'http://'.$server.':'.$GLOBALS['portGS'].'/account/get_robot_state_info';
         $curl = curl_init();
